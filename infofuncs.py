@@ -45,7 +45,6 @@ def texify(img: np.ndarray,
         spec_width: int = 8
     ) -> Generator[Literal['█', '.', '\n'], None, None]:
     """
-    does stuff ?
     the img that's taken in as argument assumes a completely unmodified, original
     version
     """
@@ -54,12 +53,9 @@ def texify(img: np.ndarray,
     gray = black_white(proportioned)
     _, thresh = cv.threshold(gray, 125, 255, 0)
 
-    # xd too lazy to change all the names after reformatting (cuz collateral damage)
-    # not a resume project anyways
-    img = thresh
 
     # gets height/width
-    img_height, img_width = img.shape[: 2]
+    img_height, img_width = thresh.shape[: 2]
     maximum_img_pixels = spec_height * spec_width
     
     # the A to B crop for each vertical line in the text image
@@ -76,7 +72,7 @@ def texify(img: np.ndarray,
     # idea here is to check each small image for pixels, cropping a size similar to '█'
     for current_YCoordinate in vertical_track:
         for current_XCoordinate in horizontal_track:
-            portion = img[
+            portion = thresh[
                 current_YCoordinate : current_YCoordinate + spec_height, 
                 current_XCoordinate : current_XCoordinate + spec_width
             ]
