@@ -63,19 +63,15 @@ def texify(img: np.ndarray,
     maximum_img_pixels = spec_height * spec_width
     
     # the A to B crop for each vertical line in the text image
-    # bad comment, cant think rn
     vertical_track = (
         y * spec_height 
-        for y 
-        in range(ceil(img_height / spec_height))
+        for y in range(ceil(img_height / spec_height))
     )
-
     # have no clue why not using list here makes thing not work
-    horizontal_track = list(
+    horizontal_track = [
         x * spec_width 
-        for x 
-        in range(ceil(img_width / spec_width))
-    )
+        for x in range(ceil(img_width / spec_width))
+   ]
 
     # idea here is to check each small image for pixels, cropping a size similar to '█'
     for current_YCoordinate in vertical_track:
@@ -96,12 +92,3 @@ def texify(img: np.ndarray,
         # new line after row of text is done
         yield '\n'
 
-
-
-
-
-
-
-
-
-def bruh():pass
