@@ -27,24 +27,15 @@ def c_resize(img: np.ndarray, text_width_min: int = 800) -> np.ndarray:
     return cv.resize(img, tuple(dimensions))
 
 
-
-"""
-    resize image till width is <= the amount where x ░'s length passes a certain threshold
-    TEXT_IMG will hold a list of tuples where each tuple will be separated by a new line
-    # indexing is [height, width]
-    print(THRESH[200, 0])
-    dimensions
-    cv.imshow('qwejlkqsdjkl', THRESH[0:22, 0:8])
-    # print('░' * 50 + '█'*55)
-"""
+# resize image till width is <= the amount where x ░'s length passes a certain threshold
+# TEXT_IMG will hold a list of tuples where each tuple will be separated by a new line
 def texify(img: np.ndarray, 
         text_width_min: int = 800,
         spec_height: int = 22, 
         spec_width: int = 8
     ) -> Generator[Literal['█', '.', '\n'], None, None]:
     """
-    the img that's taken in as argument assumes a completely unmodified, original
-    version
+    sidenote: the img that's taken in as argument assumes a completely unmodified, original version
     """
 
     proportioned = c_resize(img, text_width_min=text_width_min)
@@ -52,22 +43,19 @@ def texify(img: np.ndarray,
     _, thresh = cv.threshold(gray, 125, 255, 0)
 
 
-    # gets height/width
+    # gets height, width
     img_height, img_width = thresh.shape[: 2]
     maximum_img_pixels = spec_height * spec_width
     
     # the A to B crop for each vertical line in the text image
-    vert_track = (
-        y * spec_height 
-        for y in range(ceil(img_height / spec_height))
-    )
-    # have no clue why not using list here makes thing not work
-    horiz_track = [
-        x * spec_width 
-        for x in range(ceil(img_width / spec_width))
-   ]
+    vert_track = (y * spec_height 
+                  for y in range(ceil(img_height / spec_height)))
+    horiz_track = [x * spec_width 
+                   for x in range(ceil(img_width / spec_width))]
+    # ^^ no idea why not using list breaks functionality
 
     # idea here is to check each small image for pixels, cropping a size similar to '█'
+    # indexing is [height, width]
     for y_cor in vert_track:
         for x_cor in horiz_track:
             portion = thresh[
@@ -76,8 +64,7 @@ def texify(img: np.ndarray,
             ]
 
             # count the number of black pixels in that image
-            # -10 is random offset doesnt matter
-            """█░"""
+            # -10 is random offset, doesnt really matter
             if (np.sum(portion == 0)) > ((maximum_img_pixels / 2) - 10):
                 yield '█'
             else:
