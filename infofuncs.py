@@ -6,7 +6,7 @@ from math import ceil
 def black_white(img: np.ndarray) -> np.ndarray:
     return cv.cvtColor(img, cv.COLOR_BGR2GRAY)
 
-def C_resize(img: np.ndarray, text_width_min: int = 800) -> np.ndarray:
+def c_resize(img: np.ndarray, text_width_min: int = 800) -> np.ndarray:
     """resize image - used to resize the text image accordingly
     width_min expects the minimum width of the text-based image's 
     which is used to create the image with
@@ -31,10 +31,8 @@ def C_resize(img: np.ndarray, text_width_min: int = 800) -> np.ndarray:
 """
     resize image till width is <= the amount where x ░'s length passes a certain threshold
     TEXT_IMG will hold a list of tuples where each tuple will be separated by a new line
-
     # indexing is [height, width]
     print(THRESH[200, 0])
-
     dimensions
     cv.imshow('qwejlkqsdjkl', THRESH[0:22, 0:8])
     # print('░' * 50 + '█'*55)
@@ -49,7 +47,7 @@ def texify(img: np.ndarray,
     version
     """
 
-    proportioned = C_resize(img, text_width_min=text_width_min)
+    proportioned = c_resize(img, text_width_min=text_width_min)
     gray = black_white(proportioned)
     _, thresh = cv.threshold(gray, 125, 255, 0)
 
@@ -59,22 +57,22 @@ def texify(img: np.ndarray,
     maximum_img_pixels = spec_height * spec_width
     
     # the A to B crop for each vertical line in the text image
-    vertical_track = (
+    vert_track = (
         y * spec_height 
         for y in range(ceil(img_height / spec_height))
     )
     # have no clue why not using list here makes thing not work
-    horizontal_track = [
+    horiz_track = [
         x * spec_width 
         for x in range(ceil(img_width / spec_width))
    ]
 
     # idea here is to check each small image for pixels, cropping a size similar to '█'
-    for current_YCoordinate in vertical_track:
-        for current_XCoordinate in horizontal_track:
+    for y_cor in vert_track:
+        for x_cor in horiz_track:
             portion = thresh[
-                current_YCoordinate : current_YCoordinate + spec_height, 
-                current_XCoordinate : current_XCoordinate + spec_width
+                y_cor : y_cor + spec_height, 
+                x_cor : x_cor + spec_width
             ]
 
             # count the number of black pixels in that image
@@ -87,4 +85,3 @@ def texify(img: np.ndarray,
         
         # new line after row of text is done
         yield '\n'
-
