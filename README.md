@@ -1,4 +1,10 @@
-## asd
+## Goal
+Takes an image and delivers adjustable sizes of the image in text form. Just an opencv activity for practice.
+
+## Time Comp
+Around O(N^3)
+
+### Looks
 
 ![66dee66a628f7a817c23d4269e7e767d](https://user-images.githubusercontent.com/69024184/148629481-97a6b210-be16-475e-94fa-495c896e3509.png)
 ![9cdc34f89f0784178d9aa1a501f1ad96](https://user-images.githubusercontent.com/69024184/148630415-445ff7ed-aa22-47b5-a098-9da006a18cb4.png)
