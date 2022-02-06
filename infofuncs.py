@@ -42,22 +42,20 @@ def texify(img: np.ndarray,
     gray = black_white(proportioned)
     _, thresh = cv.threshold(gray, 125, 255, 0)
 
-
     # gets height, width
     img_height, img_width = thresh.shape[: 2]
     maximum_img_pixels = spec_height * spec_width
     
-    # the A to B crop for each vertical line in the text image
-    vert_track = (y * spec_height 
-                  for y in range(ceil(img_height / spec_height)))
-    horiz_track = [x * spec_width 
-                   for x in range(ceil(img_width / spec_width))]
-    # ^^ no idea why not using list breaks functionality
-
     # idea here is to check each small image for pixels, cropping a size similar to '█'
     # indexing is [height, width]
-    for y_cor in vert_track:
-        for x_cor in horiz_track:
+    for y_cor in ( # the A to B crop for each vertical line in the text image
+            y * spec_height
+            for y 
+            in range(ceil(img_height / spec_height)))):
+        for x_cor in (
+                x * spec_width 
+                for x 
+                in range(ceil(img_width / spec_width))):
             portion = thresh[
                 y_cor : y_cor + spec_height, 
                 x_cor : x_cor + spec_width
